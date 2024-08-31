@@ -44,10 +44,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.*;
 import org.antlr.v4.runtime.misc.MultiMap;
 import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
@@ -96,7 +93,17 @@ public class Biomedifficulty {
         ATTRIBUTE_REGISTER.register(bus);
         MinecraftForge.EVENT_BUS.register(EVENTS);
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
-        registerConfig();
+    }
+
+    @SubscribeEvent
+    public void onRegisterEvent(RegisterEvent event) {
+        if (event.getForgeRegistry() != null) {
+            if (!event.getForgeRegistry().getValues().isEmpty()) {
+                if (event.getForgeRegistry().getValues().stream().findFirst().get() instanceof Biome) {
+                    registerConfig();
+                }
+            }
+        }
     }
 
     // エンティティの作成時に属性を追加する
@@ -119,6 +126,8 @@ public class Biomedifficulty {
 
     // コンフィグの登録を行う
     private void registerConfig() {
+        BiomeSetting = new HashMap<>();
+
         String path = Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty/biomesettings/";
 
         File baseConfig = new File(Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty");
