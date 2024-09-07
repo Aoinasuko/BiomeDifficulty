@@ -44,6 +44,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.*;
 import org.antlr.v4.runtime.misc.MultiMap;
 import org.apache.commons.logging.Log;
@@ -128,13 +129,13 @@ public class Biomedifficulty {
     private void registerConfig() {
         BiomeSetting = new HashMap<>();
 
-        String path = Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty/biomesettings/";
+        String path = FMLPaths.CONFIGDIR.get() + "/biomedifficulty/biomesettings/";
 
-        File baseConfig = new File(Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty");
+        File baseConfig = new File(FMLPaths.CONFIGDIR.get() + "/biomedifficulty");
         if (!baseConfig.exists()) {
             baseConfig.mkdirs();
         }
-        File baseBiomeConfig = new File(Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty/biomesettings");
+        File baseBiomeConfig = new File(FMLPaths.CONFIGDIR.get() + "/biomedifficulty/biomesettings");
         if (!baseBiomeConfig.exists()) {
             baseBiomeConfig.mkdirs();
         }
@@ -143,7 +144,7 @@ public class Biomedifficulty {
             Gson gson = new Gson();
             ResourceKey<Biome> biomeKey = biome.getKey();
             if (!checked.contains(biomeKey.location().getNamespace())) {
-                File baseModConfig = new File(Minecraft.getInstance().gameDirectory.toString() + "/config/biomedifficulty/biomesettings/" + biomeKey.location().getNamespace());
+                File baseModConfig = new File( FMLPaths.CONFIGDIR.get() + "/biomedifficulty/biomesettings/" + biomeKey.location().getNamespace());
                 if (!baseModConfig.exists()) {
                     baseModConfig.mkdirs();
                 }
